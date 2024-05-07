@@ -23,11 +23,11 @@ def test_stash():
     stash = YmlStash(User, "/tmp/")
     yuval = User(name="yuval", age=42)
     stash.save(yuval, "foo")
-    assert stash.list_all_keys() == ["foo"]
+    assert stash.list_keys() == ["foo"]
     obj = stash.load("foo")
     assert obj == yuval
     stash.drop()
-    assert stash.list_all_keys() == []
+    assert stash.list_keys() == []
 
 
 def test_key_field():
@@ -46,10 +46,10 @@ def test_key_field():
     stash = YmlStash(Dog, "/tmp/")
     terra = Dog(name="terra")
     stash.save(terra)
-    assert stash.list_all_keys() == ["terra"]
+    assert stash.list_keys() == ["terra"]
 
     terra = Dog(name="terra")
     stash.save(terra, key="dupe")  # override key
-    assert stash.list_all_keys() == ["terra", "dupe"]
+    assert stash.list_keys() == ["terra", "dupe"]
 
     stash.drop()

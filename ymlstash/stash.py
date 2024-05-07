@@ -36,13 +36,13 @@ class YmlStash:
         with open(self._get_path(key), "w") as f:
             f.write(yaml.dump(asdict(obj)))
 
-    def _list_all_files(self):
+    def _list_files(self):
         return [f for f in os.listdir(self.path) if f.endswith(self.file_suffix)]
 
-    def list_all_keys(self):
-        return [f.replace(self.file_suffix, "") for f in self._list_all_files()]
+    def list_keys(self):
+        return [f.replace(self.file_suffix, "") for f in self._list_files()]
 
     def drop(self):
-        for f in self._list_all_files():
+        for f in self._list_files():
             if f.endswith(self.file_suffix):
                 os.remove(self.path / f)

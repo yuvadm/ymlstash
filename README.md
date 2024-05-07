@@ -49,6 +49,12 @@ Load from file:
 user = stash.load("yuval")
 ```
 
+List all keys existing in stash:
+
+```python
+keys = stash.list_keys()
+```
+
 ## License
 
 [MIT](LICENSE)
