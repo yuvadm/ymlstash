@@ -6,13 +6,17 @@ Define a dataclass:
 
 ```python
 from dataclasses import dataclass
+from typing import ClassVar
 
 @dataclass
 class User:
     name: str
     age: int
     active: bool
+    key: ClassVar[str] = "name"
 ```
+
+Note the `key` field which is used to denote that `name` should be used as the primary key field.
 
 Instantiate a new object:
 

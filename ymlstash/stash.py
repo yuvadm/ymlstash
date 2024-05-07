@@ -6,9 +6,10 @@ from pathlib import Path
 
 
 class YmlStash:
-    def __init__(self, clazz, path, file_suffix="yml", unsafe=False):
+    def __init__(self, clazz, path, key_field=None, file_suffix="yml", unsafe=False):
         self.clazz = clazz
         self.path = Path(path)
+        self.key_field = key_field
         self.file_suffix = f".{file_suffix}"
         self.yaml_loader = yaml.SafeLoader
 
@@ -21,6 +22,11 @@ class YmlStash:
         return self.clazz(**y)
 
     def save(self, key, obj):
+        if not key:
+            key_field = self.clazz.key
+            if not key_field:
+                raise Exception("no key")
+            key = getattr(obj, key_field)
         with open(self._get_path(key), "w") as f:
             f.write(yaml.dump(asdict(obj)))
 

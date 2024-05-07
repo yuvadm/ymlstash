@@ -1,6 +1,7 @@
 from pathlib import Path
 from ymlstash import YmlStash
 from dataclasses import dataclass
+from typing import ClassVar
 
 
 @dataclass
@@ -25,3 +26,17 @@ def test_stash():
     assert obj == yuval
     stash.drop()
     assert stash.list_all_keys() == []
+
+
+@dataclass
+class Dog:
+    name: str
+    key: ClassVar[str] = "name"
+
+
+def test_auto_key():
+    stash = YmlStash(Dog, "/tmp/")
+    terra = Dog(name="terra")
+    stash.save(None, terra)
+    assert stash.list_all_keys() == ["terra"]
+    stash.drop()
