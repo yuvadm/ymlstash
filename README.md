@@ -2,6 +2,8 @@
 
 A simple ORM-like utility for operating on local YAML files via Python dataclasses.
 
+## Usage
+
 Define a dataclass:
 
 ```python
@@ -16,7 +18,7 @@ class User:
     key: ClassVar[str] = "name"
 ```
 
-Note the `key` field which is used to denote that `name` should be used as the primary key field.
+Note the special `key` field which is used to denote that `name` should be used as the primary key field.
 
 Instantiate a new object:
 
@@ -30,7 +32,7 @@ Save it to file:
 from ymlstash import YmlStash
 
 stash = YmlStash(User, "path/to/db")
-stash.save("yuval", user)
+stash.save(user)
 ```
 
 Load from file:

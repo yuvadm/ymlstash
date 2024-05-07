@@ -1,17 +1,23 @@
 import yaml
 import os
 
-from dataclasses import asdict
+from dataclasses import asdict, fields
 from pathlib import Path
 
 
 class YmlStash:
-    def __init__(self, clazz, path, key_field=None, file_suffix="yml", unsafe=False):
+    def __init__(self, clazz, path, file_suffix="yml", unsafe=False):
         self.clazz = clazz
         self.path = Path(path)
-        self.key_field = key_field
         self.file_suffix = f".{file_suffix}"
         self.yaml_loader = yaml.SafeLoader
+        self._validate()
+
+    def _validate(self):
+        key_field = getattr(self.clazz, "key", None)
+        field_names = [f.name for f in fields(self.clazz)]
+        if key_field and key_field not in field_names:
+            raise Exception(f"Dataclass {self.clazz} has no key field '{key_field}'")
 
     def _get_path(self, key):
         return self.path / f"{key}{self.file_suffix}"
@@ -21,11 +27,11 @@ class YmlStash:
             y = yaml.load(f.read(), Loader=self.yaml_loader)
         return self.clazz(**y)
 
-    def save(self, key, obj):
+    def save(self, obj, key=None):
         if not key:
             key_field = self.clazz.key
             if not key_field:
-                raise Exception("no key")
+                raise Exception("Cannot save object without a key or key field")
             key = getattr(obj, key_field)
         with open(self._get_path(key), "w") as f:
             f.write(yaml.dump(asdict(obj)))
