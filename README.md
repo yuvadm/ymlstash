@@ -2,6 +2,16 @@
 
 A simple ORM-like utility for operating on local YAML files via Python dataclasses.
 
+## Install
+
+Package is published on PyPI - https://pypi.org/project/ymlstash/
+
+Install from pip or your favorite package manager:
+
+```bash
+$ pip install ymlstash
+```
+
 ## Usage
 
 Define a dataclass:
