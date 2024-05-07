@@ -18,7 +18,7 @@ class User:
     key: ClassVar[str] = "name"
 ```
 
-Note the special `key` field which is used to denote that `name` should be used as the primary key field.
+Note the special `key` field which is used to denote that `name` should be used as the primary key field. If an object has `name: "foo"`, it will be saved as `foo.yml` in the stash root directory.
 
 Instantiate a new object:
 
