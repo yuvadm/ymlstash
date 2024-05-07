@@ -1,15 +1,12 @@
 [tool.poetry]
 name = "ymlstash"
-version = "1.0.1"
+version = "1.0.2"
 description = "A simple ORM-like utility for operating on local YAML files via Python dataclasses"
 authors = ["Yuval Adam <_@yuv.al>"]
 readme = "README.md"
 license = "MIT"
-
-[project.urls]
-Homepage = "https://github.com/yuvadm/ymlstash"
-Repository = "https://github.com/yuvadm/ymlstash"
-Issues = "https://github.com/yuvadm/ymlstash/issues"
+homepage = "https://github.com/yuvadm/ymlstash"
+repository = "https://github.com/yuvadm/ymlstash"
 
 [tool.poetry.dependencies]
 python = "^3.8"
