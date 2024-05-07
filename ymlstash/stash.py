@@ -14,6 +14,9 @@ class YmlStash:
         self._validate()
 
     def _validate(self):
+        if not self.path.exists():
+            raise Exception(f"Path {self.path} does not exist and cannot be used")
+
         key_field = getattr(self.clazz, "key", None)
         field_names = [f.name for f in fields(self.clazz)]
         if key_field and key_field not in field_names:
