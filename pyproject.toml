@@ -4,9 +4,11 @@ version = "1.0.0"
 description = "A simple ORM-like utility for operating on local YAML files via Python dataclasses"
 authors = ["Yuval Adam <_@yuv.al>"]
 readme = "README.md"
+license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.8"
+pyyaml = "^6.0.1"
 
 
 [build-system]
