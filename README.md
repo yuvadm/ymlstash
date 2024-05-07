@@ -25,6 +25,12 @@ Save it to file:
 ```python
 from ymlstash import YmlStash
 
-stash = YmlStash("path/to/db")
-stash.save(user)
+stash = YmlStash(User, "path/to/db")
+stash.save("yuval", user)
+```
+
+Load from file:
+
+```python
+user = stash.load("yuval")
 ```
