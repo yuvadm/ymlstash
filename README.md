@@ -48,3 +48,7 @@ Load from file:
 ```python
 user = stash.load("yuval")
 ```
+
+## License
+
+[MIT](LICENSE)
