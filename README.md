@@ -35,6 +35,14 @@ stash = YmlStash(User, "path/to/db")
 stash.save(user)
 ```
 
+This will create a `yuval.yml` file in the stash root directory.
+
+When saving to file, a `key` field must be present on the dataclass, otherwise an explicit `key` must be passed:
+
+```python
+stash.save(obj, key="custom-key")
+```
+
 Load from file:
 
 ```python
