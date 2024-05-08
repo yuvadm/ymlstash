@@ -6,8 +6,8 @@ from pathlib import Path
 
 
 class YmlStash:
-    def __init__(self, clazz, path, file_suffix="yml", unsafe=False):
-        self.clazz = clazz
+    def __init__(self, model, path, file_suffix="yml", unsafe=False):
+        self.model = model
         self.path = Path(path)
         self.file_suffix = f".{file_suffix}"
         self.yaml_loader = yaml.SafeLoader
@@ -17,10 +17,10 @@ class YmlStash:
         if not self.path.exists():
             raise Exception(f"Path {self.path} does not exist and cannot be used")
 
-        key_field = getattr(self.clazz, "key", None)
-        field_names = [f.name for f in fields(self.clazz)]
+        key_field = getattr(self.model, "key", None)
+        field_names = [f.name for f in fields(self.model)]
         if key_field and key_field not in field_names:
-            raise Exception(f"Dataclass {self.clazz} has no key field '{key_field}'")
+            raise Exception(f"Dataclass {self.model} has no key field '{key_field}'")
 
     def _get_path(self, key):
         return self.path / f"{key}{self.file_suffix}"
@@ -28,11 +28,11 @@ class YmlStash:
     def load(self, key):
         with open(self._get_path(key)) as f:
             y = yaml.load(f.read(), Loader=self.yaml_loader)
-        return self.clazz(**y)
+        return self.model(**y)
 
     def save(self, obj, key=None):
         if not key:
-            key_field = self.clazz.key
+            key_field = self.model.key
             if not key_field:
                 raise Exception("Cannot save object without a key or key field")
             key = getattr(obj, key_field)
