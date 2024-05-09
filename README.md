@@ -65,6 +65,24 @@ List all keys existing in stash:
 keys = stash.list_keys()
 ```
 
+Delete a key:
+
+```python
+stash.delete("foo")
+```
+
+Check for key existance:
+
+```python
+stash.exists("foo")
+```
+
+Drop all files (careful, this deletes everything):
+
+```python
+stash.drop()
+```
+
 ## License
 
 [MIT](LICENSE)

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ymlstash"
-version = "1.0.2"
+version = "1.1.0"
 description = "A simple ORM-like utility for operating on local YAML files via Python dataclasses"
 authors = ["Yuval Adam <_@yuv.al>"]
 readme = "README.md"
