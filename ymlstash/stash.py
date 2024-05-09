@@ -6,7 +6,14 @@ from pathlib import Path
 
 
 class YmlStash:
-    def __init__(self, model, path, file_suffix="yml", unsafe=False, filter_none=False):
+    def __init__(
+        self,
+        model,
+        path,
+        file_suffix="yml",
+        unsafe=False,
+        filter_none=False,
+    ):
         self.model = model
         self.path = Path(path)
         self.file_suffix = f".{file_suffix}"
@@ -44,7 +51,14 @@ class YmlStash:
             obj_dict = asdict(obj)
             if self.filter_none:
                 obj_dict = {k: v for (k, v) in obj_dict.items() if v is not None}
-            f.write(yaml.dump(obj_dict, default_flow_style=False, sort_keys=False))
+            f.write(
+                yaml.dump(
+                    obj_dict,
+                    allow_unicode=True,
+                    default_flow_style=False,
+                    sort_keys=False,
+                )
+            )
 
     def delete(self, key):
         try:
