@@ -3,7 +3,7 @@ import pytest
 from pathlib import Path
 from ymlstash import YmlStash
 from dataclasses import dataclass
-from typing import ClassVar
+from typing import ClassVar, Optional
 
 TEST_STASH_PATH = Path("/tmp")
 
@@ -99,5 +99,24 @@ def test_dump_order():
         lines = f.readlines()
         keys = "".join([line[0] for line in lines])
         assert keys == "ordeaz"
+
+    stash.drop()
+
+
+def test_null_values():
+    @dataclass
+    class Nullable:
+        name: str
+        nullval: Optional[str] = None
+        key: ClassVar[str] = "name"
+
+    stash = YmlStash(Nullable, TEST_STASH_PATH, filter_none=True)
+    goo = Nullable("goo")
+    stash.save(goo)
+
+    with open(TEST_STASH_PATH / "goo.yml", "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            assert "nullval" not in line
 
     stash.drop()

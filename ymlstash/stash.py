@@ -6,11 +6,12 @@ from pathlib import Path
 
 
 class YmlStash:
-    def __init__(self, model, path, file_suffix="yml", unsafe=False):
+    def __init__(self, model, path, file_suffix="yml", unsafe=False, filter_none=False):
         self.model = model
         self.path = Path(path)
         self.file_suffix = f".{file_suffix}"
         self.yaml_loader = yaml.SafeLoader
+        self.filter_none = filter_none
         self._validate()
 
     def _validate(self):
@@ -40,7 +41,10 @@ class YmlStash:
                 raise Exception("Cannot save object without a key or key field")
             key = getattr(obj, key_field)
         with open(self._get_path(key), "w") as f:
-            f.write(yaml.dump(asdict(obj), default_flow_style=False, sort_keys=False))
+            obj_dict = asdict(obj)
+            if self.filter_none:
+                obj_dict = {k: v for (k, v) in obj_dict.items() if v is not None}
+            f.write(yaml.dump(obj_dict, default_flow_style=False, sort_keys=False))
 
     def delete(self, key):
         try:
