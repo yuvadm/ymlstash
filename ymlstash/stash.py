@@ -1,7 +1,7 @@
 import yaml
 import os
 
-from dataclasses import asdict, fields
+from dataclasses import asdict, fields, is_dataclass
 from pathlib import Path
 
 
@@ -16,6 +16,9 @@ class YmlStash:
     def _validate(self):
         if not self.path.exists():
             raise Exception(f"Path {self.path} does not exist and cannot be used")
+
+        if not is_dataclass(self.model):
+            raise Exception(f"Class {self.model} is not a dataclass")
 
         key_field = getattr(self.model, "key", None)
         field_names = [f.name for f in fields(self.model)]
@@ -37,7 +40,7 @@ class YmlStash:
                 raise Exception("Cannot save object without a key or key field")
             key = getattr(obj, key_field)
         with open(self._get_path(key), "w") as f:
-            f.write(yaml.dump(asdict(obj)))
+            f.write(yaml.dump(asdict(obj), default_flow_style=False, sort_keys=False))
 
     def delete(self, key):
         try:

@@ -5,7 +5,7 @@ from ymlstash import YmlStash
 from dataclasses import dataclass
 from typing import ClassVar
 
-TEST_STASH_PATH = "/tmp"
+TEST_STASH_PATH = Path("/tmp")
 
 
 @dataclass
@@ -21,9 +21,12 @@ def test_stash_path():
     assert stash.path == Path(".")
 
 
-def test_invalid_path():
+def test_invalid():
     with pytest.raises(Exception):
         YmlStash(User, "/tmp/does/not/exist")
+    with pytest.raises(Exception) as e:
+        YmlStash(object, ".")
+    assert "is not a dataclass" in e.value.args[0]
 
 
 def test_stash():
@@ -55,7 +58,7 @@ def test_stash():
 def test_key_field():
     @dataclass
     class Rat:
-        key: ClassVar[str] = "name"
+        key: ClassVar[str] = "foo"
 
     with pytest.raises(Exception):
         YmlStash(Rat, ".")
@@ -73,5 +76,28 @@ def test_key_field():
     terra = Dog(name="terra")
     stash.save(terra, key="dupe")  # override key
     assert stash.list_keys() == ["terra", "dupe"]
+
+    stash.drop()
+
+
+def test_dump_order():
+    @dataclass
+    class Order:
+        o: int
+        r: int
+        d: int
+        e: int
+        a: int
+        z: int
+        key: ClassVar[str] = "o"
+
+    stash = YmlStash(Order, TEST_STASH_PATH)
+    order = Order(1, 2, 3, 4, 5, 6)
+    stash.save(order)
+
+    with open(TEST_STASH_PATH / "1.yml", "r") as f:
+        lines = f.readlines()
+        keys = "".join([line[0] for line in lines])
+        assert keys == "ordeaz"
 
     stash.drop()
