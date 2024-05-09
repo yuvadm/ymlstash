@@ -28,11 +28,26 @@ def test_invalid_path():
 
 def test_stash():
     stash = YmlStash(User, TEST_STASH_PATH)
+
     yuval = User(name="yuval", age=42)
     stash.save(yuval, "foo")
+    assert stash.exists("foo")
+    assert not stash.exists("goo")
     assert stash.list_keys() == ["foo"]
+
     obj = stash.load("foo")
     assert obj == yuval
+
+    goo = User(name="goo", age=10)
+    stash.save(goo, "goo")
+    assert stash.list_keys() == ["foo", "goo"]
+
+    stash.delete("foo")
+    assert stash.list_keys() == ["goo"]
+
+    with pytest.raises(Exception):
+        stash.delete("foo")
+
     stash.drop()
     assert stash.list_keys() == []
 

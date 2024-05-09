@@ -39,6 +39,17 @@ class YmlStash:
         with open(self._get_path(key), "w") as f:
             f.write(yaml.dump(asdict(obj)))
 
+    def delete(self, key):
+        try:
+            os.remove(self._get_path(key))
+        except FileNotFoundError:
+            raise Exception(
+                f"Attempting to delete key '{key}' which was not found in stash"
+            )
+
+    def exists(self, key):
+        return self._get_path(key).exists()
+
     def _list_files(self):
         return [f for f in os.listdir(self.path) if f.endswith(self.file_suffix)]
 
@@ -46,6 +57,5 @@ class YmlStash:
         return [f.replace(self.file_suffix, "") for f in self._list_files()]
 
     def drop(self):
-        for f in self._list_files():
-            if f.endswith(self.file_suffix):
-                os.remove(self.path / f)
+        for key in self.list_keys():
+            self.delete(key)
